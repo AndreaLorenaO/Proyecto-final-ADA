@@ -2,24 +2,17 @@ package com.ada.controller;
 
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ada.model.EPaymentMethods;
 import com.ada.model.Enrollment;
-import com.ada.payload.request.EnrollmentRequest;
-import com.ada.payload.request.ScholarshipRequest;
 import com.ada.repository.EnrollmentRepo;
 import com.ada.repository.PaymentMethodRepo;
 import com.ada.service.CourseService;
@@ -62,56 +55,56 @@ public class EnrollmentController {
 		}
 	}
 
-	@PostMapping("/direct-payment")
-//	@PreAuthorize("hasRole('STUDENT')")	
-	public ResponseEntity<Enrollment> createEnrollmentDirect(@Valid @RequestBody EnrollmentRequest enrollmentRequest) {
-		Enrollment enrollment = new Enrollment();
-		enrollment = enrollmentService.addEnrollmentRequest(enrollmentRequest, enrollment);
-		enrollment = enrollmentService.paymentMethod(enrollment, enrollmentRequest);
+//	@PostMapping("/direct-payment")
+////	@PreAuthorize("hasRole('STUDENT')")	
+//	public ResponseEntity<Enrollment> createEnrollmentDirect(@Valid @RequestBody EnrollmentRequest enrollmentRequest) {
+//		Enrollment enrollment = new Enrollment();
+//		enrollment = enrollmentService.addEnrollmentRequest(enrollmentRequest, enrollment);
+//		enrollment = enrollmentService.paymentMethod(enrollment, enrollmentRequest);
+//
+//		if (enrollment.getPaymentMethods().equals(EPaymentMethods.DIRECT_PAYMENT)) {
+//			if (enrollmentService.checkMaxQuota(enrollment)) {
+//				enrollment.setApproved(true);
+//				enrollmentService.save(enrollment);
+//				try {
+//					enrollmentService.updateMaxQuota(enrollment);
+//				} catch (Exception e) {
+//					return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+//				}
+//			}
+//			return new ResponseEntity<>(enrollment, HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 
-		if (enrollment.getPaymentMethods().equals(EPaymentMethods.DIRECT_PAYMENT)) {
-			if (enrollmentService.checkMaxQuota(enrollment)) {
-				enrollment.setApproved(true);
-				enrollmentService.save(enrollment);
-				try {
-					enrollmentService.updateMaxQuota(enrollment);
-				} catch (Exception e) {
-					return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-				}
-			}
-			return new ResponseEntity<>(enrollment, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@PostMapping("/scholarship")
-//	@PreAuthorize("hasRole('STUDENT')")	
-	public ResponseEntity<Enrollment> createEnrollmentScholarsip(
-			@Valid @RequestBody EnrollmentRequest enrollmentRequest,
-			@RequestBody ScholarshipRequest scholarshipRequest) {
-		Enrollment enrollment = new Enrollment();
-		enrollment = enrollmentService.addEnrollmentRequest(enrollmentRequest, enrollment);
-		enrollment = enrollmentService.paymentMethod(enrollment, enrollmentRequest);
-
-		if (!enrollment.getPaymentMethods().equals(EPaymentMethods.DIRECT_PAYMENT)) {
-			if (enrollmentService.checkScholarshipQuota(enrollment)) {
-				if (enrollmentService.checkStudentStatus(enrollment)) {
-
-				}
-
-				enrollmentService.save(enrollment);
-				try {
-					enrollmentService.updateMaxQuota(enrollment);
-				} catch (Exception e) {
-					return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-				}
-			}
-			return new ResponseEntity<>(enrollment, HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+//	@PostMapping("/scholarship")
+////	@PreAuthorize("hasRole('STUDENT')")	
+//	public ResponseEntity<Enrollment> createEnrollmentScholarsip(
+//			@Valid @RequestBody EnrollmentRequest enrollmentRequest,
+//			@RequestBody ScholarshipRequest scholarshipRequest) {
+//		Enrollment enrollment = new Enrollment();
+//		enrollment = enrollmentService.addEnrollmentRequest(enrollmentRequest, enrollment);
+//		enrollment = enrollmentService.paymentMethod(enrollment, enrollmentRequest);
+//
+//		if (!enrollment.getPaymentMethods().equals(EPaymentMethods.DIRECT_PAYMENT)) {
+//			if (enrollmentService.checkScholarshipQuota(enrollment)) {
+//				if (enrollmentService.checkStudentStatus(enrollment)) {
+//
+//				}
+//
+//				enrollmentService.save(enrollment);
+//				try {
+//					enrollmentService.updateMaxQuota(enrollment);
+//				} catch (Exception e) {
+//					return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+//				}
+//			}
+//			return new ResponseEntity<>(enrollment, HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
+//	}
 
 }
 //	@PutMapping("/{id}")
