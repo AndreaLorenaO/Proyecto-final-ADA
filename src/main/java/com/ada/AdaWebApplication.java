@@ -10,5 +10,4 @@ public class AdaWebApplication {
 		SpringApplication.run(AdaWebApplication.class, args);
 	}
 
-	// vamos a ver que onda esta poronga
 }
