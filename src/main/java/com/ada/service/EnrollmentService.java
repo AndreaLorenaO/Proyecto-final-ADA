@@ -67,22 +67,22 @@ public class EnrollmentService {
 
 		strPaymentMethods.forEach(paymentMethod -> {
 			switch (paymentMethod) {
-			case "pago_directo":
+			case "direct_payment":
 				PaymentMethod pagoDirecPayMethod = paymentMethodRepo.findByName(EPaymentMethods.DIRECT_PAYMENT)
 						.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
 				paymentMethods.add(pagoDirecPayMethod);
 				break;
-			case "beca_50":
+			case "scholarship_50":
 				PaymentMethod pagoBeca50 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_50)
 						.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
 				paymentMethods.add(pagoBeca50);
 				break;
-			case "beca_75":
+			case "scholarship_75":
 				PaymentMethod pagoBeca75 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_75)
 						.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
 				paymentMethods.add(pagoBeca75);
 				break;
-			case "beca_100":
+			case "scholarship_100":
 				PaymentMethod pagoBeca100 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_100)
 						.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
 				paymentMethods.add(pagoBeca100);
