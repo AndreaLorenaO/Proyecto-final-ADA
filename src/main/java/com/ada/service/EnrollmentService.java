@@ -51,7 +51,17 @@ public class EnrollmentService {
 		enrollmentRepo.delete(entity.get());
 	}
 
-	public Enrollment paymentMethod(Enrollment enrollment, EnrollmentRequest enrollmentRequest) {
+	public Enrollment createEnrollmentRequest(EnrollmentRequest enrollmentRequest) {
+		Optional<Student> studentOp = studentService.findById(enrollmentRequest.getStudentId());
+		Student student = studentOp.get();
+
+		Optional<Course> courseOp = courseService.findById(enrollmentRequest.getCourseId());
+		Course course = courseOp.get();
+
+		Enrollment enrollment = new Enrollment();
+		enrollment.setStudent(student);
+		enrollment.setCourse(course);
+
 		Set<String> strPaymentMethods = enrollmentRequest.getPaymentMethod();
 		Set<PaymentMethod> paymentMethods = new HashSet<>();
 
@@ -80,21 +90,8 @@ public class EnrollmentService {
 			}
 		});
 		enrollment.setPaymentMethods(paymentMethods);
+// 		can't save enrollment here because I still have to check the course's quota
 //		enrollmentRepo.save(enrollment);
-
-		return enrollment;
-	}
-
-	public Enrollment addEnrollmentRequest(EnrollmentRequest enrollmentRequest, Enrollment enrollment) {
-		Optional<Student> studentOp = studentService.findById(enrollmentRequest.getStudentId());
-		Student student = studentOp.get();
-
-		Optional<Course> courseOp = courseService.findById(enrollmentRequest.getCourseId());
-		Course course = courseOp.get();
-
-		enrollment.setStudent(student);
-		enrollment.setCourse(course);
-
 		return enrollment;
 	}
 
@@ -127,6 +124,13 @@ public class EnrollmentService {
 		Student student = enrollment.getStudent();
 
 		return false;
+	}
+
+	public void updateScholarshipQuota(Enrollment enrollment) {
+		Course course = enrollment.getCourse();
+		int scholarshipQuota = course.getScholarshipsQuota();
+		course.setScholarshipsQuota(scholarshipQuota - 1);
+		courseService.save(course);
 	}
 
 }

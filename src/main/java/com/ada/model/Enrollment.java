@@ -29,8 +29,6 @@ public class Enrollment {
 	@JoinColumn(name = "id_course")
 	private Course course;
 
-	private boolean approved;
-
 	Set<PaymentMethod> paymentMethods;
 
 //	@ManyToMany(fetch = FetchType.LAZY)
@@ -72,14 +70,6 @@ public class Enrollment {
 
 	public Course setCourse(Course course) {
 		return this.course = course;
-	}
-
-	public boolean isApproved() {
-		return approved;
-	}
-
-	public void setApproved(boolean approved) {
-		this.approved = approved;
 	}
 
 	public Set<PaymentMethod> getPaymentMethods() {

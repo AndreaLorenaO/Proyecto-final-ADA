@@ -31,6 +31,8 @@ public class Scholarship {
 	@Column(name = "number_dependents")
 	private int numberOfDependents;
 
+	private boolean approved;
+
 //	public Student getStudenId() {
 //		return studenId;
 //	}
@@ -93,6 +95,14 @@ public class Scholarship {
 
 	public void setNumberOfDependents(int numberOfDependents) {
 		this.numberOfDependents = numberOfDependents;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
 	}
 
 }
