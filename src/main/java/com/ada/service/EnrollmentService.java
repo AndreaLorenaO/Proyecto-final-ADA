@@ -134,4 +134,14 @@ public class EnrollmentService {
 		courseService.save(course);
 	}
 
+	public boolean acceptedScholarship(Enrollment enrollment) {
+//		Student student = enrollment.getStudent();
+//		
+//		
+//		if (scholarship.isApproved()) {
+//			return true;
+//		}
+		return false;
+	}
+
 }

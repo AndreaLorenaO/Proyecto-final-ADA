@@ -81,7 +81,9 @@ public class EnrollmentController {
 					return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 				}
 			} else {
-				if (enrollmentService.checkScholarshipQuota(enrollment)
+				// separate this method in two parts, this would be enrollment with scholarship
+				if (enrollmentService.acceptedScholarship(enrollment)
+						&& enrollmentService.checkScholarshipQuota(enrollment)
 						&& enrollmentService.checkStudentStatus(enrollment)) {
 					enrollmentService.save(enrollment);
 					enrollmentService.updateScholarshipQuota(enrollment);
