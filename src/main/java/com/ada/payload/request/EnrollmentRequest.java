@@ -4,9 +4,6 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
-import com.ada.model.Course;
-import com.ada.model.Student;
-
 public class EnrollmentRequest {
 
 	@NotNull
@@ -17,26 +14,6 @@ public class EnrollmentRequest {
 
 	@NotNull
 	private Set<String> paymentMethod;
-
-	private Student student;
-
-	private Course course;
-
-	public Student getStudent() {
-		return student;
-	}
-
-	public Student setStudent(Student student) {
-		return this.student = student;
-	}
-
-	public Course getCourse() {
-		return course;
-	}
-
-	public Course setCourse(Course course) {
-		return this.course = course;
-	}
 
 	public Long getStudentId() {
 		return studentId;

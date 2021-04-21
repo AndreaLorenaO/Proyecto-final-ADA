@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Scholarship {
@@ -14,8 +18,15 @@ public class Scholarship {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int scholarshipId;
 
-//	@OneToMany
-//	private Student studenId;
+	@OneToOne
+	@JoinColumn(name = "id_student", nullable = false)
+	@JsonBackReference
+	private Student student;
+
+	@OneToOne
+	@JoinColumn(name = "id_course", nullable = false)
+	@JsonBackReference
+	private Course course;
 
 	private boolean studies;
 
@@ -33,13 +44,36 @@ public class Scholarship {
 
 	private boolean approved;
 
-//	public Student getStudenId() {
-//		return studenId;
-//	}
-//
-//	public void setStudenId(Student studenId) {
-//		this.studenId = studenId;
-//	}
+	public Scholarship() {
+	}
+
+	public Scholarship(Student student, Course course, boolean studies, boolean works, boolean income,
+			int monthlyincome, boolean dependents, int numberOfDependents) {
+		this.student = student;
+		this.course = course;
+		this.studies = studies;
+		this.works = works;
+		this.income = income;
+		this.monthlyincome = monthlyincome;
+		this.dependents = dependents;
+		this.numberOfDependents = numberOfDependents;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
 
 	public int getScholarshipId() {
 		return scholarshipId;

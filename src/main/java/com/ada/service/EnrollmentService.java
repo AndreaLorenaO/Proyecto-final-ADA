@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +13,8 @@ import com.ada.model.Enrollment;
 import com.ada.model.PaymentMethod;
 import com.ada.model.Student;
 import com.ada.payload.request.EnrollmentRequest;
-import com.ada.repository.CourseRepo;
 import com.ada.repository.EnrollmentRepo;
 import com.ada.repository.PaymentMethodRepo;
-import com.ada.repository.StudentRepo;
 
 @Service
 public class EnrollmentService {
@@ -36,15 +32,7 @@ public class EnrollmentService {
 	StudentService studentService;
 
 	@Autowired
-	StudentRepo studentRepo;
-
-	@Autowired
 	CourseService courseService;
-
-	@Autowired
-	CourseRepo courseRepo;
-
-	Log log = LogFactory.getLog(EnrollmentService.class);
 
 	public Iterable<Enrollment> findAll() {
 		return this.enrollmentRepo.findAll();

@@ -77,7 +77,7 @@ public class EnrollmentController {
 					log.info("Enrollment created");
 					return new ResponseEntity<>(null, HttpStatus.CREATED);
 				} else {
-					log.info("There is no more quota available");
+					log.info("There is no more quota available for the selected course");
 					return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 				}
 			} else {
