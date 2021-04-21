@@ -12,4 +12,6 @@ public interface CourseRepo extends CrudRepository<Course, Long> {
 
 	public List<Course> findByCourseCategStartingWith(String courseCateg);
 
+//	public boolean existsById(Long courseId);
+
 }

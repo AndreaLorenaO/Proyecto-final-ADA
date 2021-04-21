@@ -8,4 +8,6 @@ import com.ada.model.Student;
 @Repository
 public interface StudentRepo extends CrudRepository<Student, Long> {
 
+//	public boolean existsById(Long studentId);
+
 }
