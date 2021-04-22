@@ -15,6 +15,8 @@ public class EnrollmentRequest {
 	@NotNull
 	private Set<String> paymentMethod;
 
+	private int scholarshipId;
+
 	public Long getStudentId() {
 		return studentId;
 	}
@@ -37,6 +39,14 @@ public class EnrollmentRequest {
 
 	public void setPaymentMethod(Set<String> paymentMethod) {
 		this.paymentMethod = paymentMethod;
+	}
+
+	public int getScholarshipId() {
+		return scholarshipId;
+	}
+
+	public void setScholarshipId(int scholarshipId) {
+		this.scholarshipId = scholarshipId;
 	}
 
 }

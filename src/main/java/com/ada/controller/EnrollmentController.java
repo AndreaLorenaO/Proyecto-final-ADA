@@ -81,52 +81,39 @@ public class EnrollmentController {
 					return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 				}
 			} else {
-				// separate this method in two parts, this would be enrollment with scholarship
-				if (enrollmentService.acceptedScholarship(enrollment)
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	@PostMapping("/scholarship-payment")
+//@PreAuthorize("hasRole('STUDENT')")	
+	public ResponseEntity<Enrollment> createEnrollmentWithScholarship(
+			@Valid @RequestBody EnrollmentRequest enrollmentRequest) {
+		try {
+			Enrollment enrollment = enrollmentService.createEnrollmentRequest(enrollmentRequest);
+			if (!enrollment.getPaymentMethods().equals(EPaymentMethods.DIRECT_PAYMENT)) {
+				if (enrollmentService.acceptedScholarship(enrollmentRequest)
 						&& enrollmentService.checkScholarshipQuota(enrollment)
 						&& enrollmentService.checkStudentStatus(enrollment)) {
 					enrollmentService.save(enrollment);
 					enrollmentService.updateScholarshipQuota(enrollment);
-					log.info("Enrollment created");
+					log.info("Enrollment with scholarship created");
 					return new ResponseEntity<>(null, HttpStatus.CREATED);
 				} else {
-					log.info("There is no more quota available");
+					log.info("There is no more quota with scholarship available for the selected course");
 					return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 				}
+			} else {
+				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }
-
-//	@PostMapping("/scholarship")
-////	@PreAuthorize("hasRole('STUDENT')")	
-//	public ResponseEntity<Enrollment> createEnrollmentScholarsip(
-//			@Valid @RequestBody EnrollmentRequest enrollmentRequest,
-//			@RequestBody ScholarshipRequest scholarshipRequest) {
-//		Enrollment enrollment = new Enrollment();
-//		enrollment = enrollmentService.addEnrollmentRequest(enrollmentRequest, enrollment);
-//		enrollment = enrollmentService.paymentMethod(enrollment, enrollmentRequest);
-//
-//		if (!enrollment.getPaymentMethods().equals(EPaymentMethods.DIRECT_PAYMENT)) {
-//			if (enrollmentService.checkScholarshipQuota(enrollment)) {
-//				if (enrollmentService.checkStudentStatus(enrollment)) {
-//
-//				}
-//
-//				enrollmentService.save(enrollment);
-//				try {
-//					enrollmentService.updateMaxQuota(enrollment);
-//				} catch (Exception e) {
-//					return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-//				}
-//			}
-//			return new ResponseEntity<>(enrollment, HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//	}
 
 //	@PutMapping("/{id}")
 //	public ResponseEntity<Enrollment> updateEnrollment(@PathVariable("id") int enrollmentId,

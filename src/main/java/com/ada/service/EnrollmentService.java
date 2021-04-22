@@ -11,10 +11,12 @@ import com.ada.model.Course;
 import com.ada.model.EPaymentMethods;
 import com.ada.model.Enrollment;
 import com.ada.model.PaymentMethod;
+import com.ada.model.Scholarship;
 import com.ada.model.Student;
 import com.ada.payload.request.EnrollmentRequest;
 import com.ada.repository.EnrollmentRepo;
 import com.ada.repository.PaymentMethodRepo;
+import com.ada.repository.ScholarshipRepo;
 
 @Service
 public class EnrollmentService {
@@ -33,6 +35,12 @@ public class EnrollmentService {
 
 	@Autowired
 	CourseService courseService;
+
+	@Autowired
+	ScholarshipService scholarshipService;
+
+	@Autowired
+	ScholarshipRepo scholarshipRepo;
 
 	public Iterable<Enrollment> findAll() {
 		return this.enrollmentRepo.findAll();
@@ -120,11 +128,14 @@ public class EnrollmentService {
 		}
 	}
 
-	// code in progress
 	public boolean checkStudentStatus(Enrollment enrollment) {
 		Student student = enrollment.getStudent();
 
-		return false;
+		Optional<Scholarship> scholarshipOp = scholarshipRepo.findByStudent(student);
+		if (scholarshipOp.isPresent()) {
+			return false;
+		}
+		return true;
 	}
 
 	public void updateScholarshipQuota(Enrollment enrollment) {
@@ -134,13 +145,14 @@ public class EnrollmentService {
 		courseService.save(course);
 	}
 
-	public boolean acceptedScholarship(Enrollment enrollment) {
-//		Student student = enrollment.getStudent();
-//		
-//		
-//		if (scholarship.isApproved()) {
-//			return true;
-//		}
+	public boolean acceptedScholarship(EnrollmentRequest enrollmentRequest) {
+		int scholarshipId = enrollmentRequest.getScholarshipId();
+		Optional<Scholarship> scholarshipOp = scholarshipService.findById(scholarshipId);
+		Scholarship scholarship = scholarshipOp.get();
+
+		if (scholarship.isApproved()) {
+			return true;
+		}
 		return false;
 	}
 
