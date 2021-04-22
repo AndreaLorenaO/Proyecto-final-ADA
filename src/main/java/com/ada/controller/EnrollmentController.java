@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -113,19 +114,28 @@ public class EnrollmentController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-}
 
 //	@PutMapping("/{id}")
 //	public ResponseEntity<Enrollment> updateEnrollment(@PathVariable("id") int enrollmentId,
-//			@RequestBody EnrollmentUpdated enrollmentUpdated) {
+//			@RequestBody EnrollmentRequest enrollmentRequest) {
 //		Optional<Enrollment> enrollmentInfo = enrollmentService.findById(enrollmentId);
-//
 //		if (enrollmentInfo.isPresent()) {
 //			Enrollment enrollmentUpdate = enrollmentInfo.get();
-//			enrollmentUpdate.setAccepted(enrollmentUpdated.getAccepted());
-//
+//			enrollmentUpdate.setStudent(enrollmentRequest.getStudentId());
 //			return new ResponseEntity<>(enrollmentService.save(enrollmentUpdate), HttpStatus.OK);
 //		} else {
 //			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 //		}
 //	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Enrollment> deleteEnrollment(@PathVariable("id") int enrollmentId) {
+		try {
+			enrollmentService.deleteById(enrollmentId);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+}
