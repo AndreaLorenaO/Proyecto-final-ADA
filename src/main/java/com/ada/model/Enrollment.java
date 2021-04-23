@@ -1,5 +1,6 @@
 package com.ada.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -29,16 +32,11 @@ public class Enrollment {
 	@JoinColumn(name = "id_course")
 	private Course course;
 
-	Set<PaymentMethod> paymentMethods;
+//	Set<PaymentMethod> paymentMethods;
 
-//	@ManyToMany(fetch = FetchType.LAZY)
-//	@JoinTable(name = "enrollment_payment_methods", joinColumns = @JoinColumn(name = "id_enrollment"), inverseJoinColumns = @JoinColumn(name = "id_payment_method"))
-//	private Set<PaymentMethod> paymentMethods = new HashSet<>();
-
-//	private boolean withScholarship;
-//	private boolean scholarshipAccepted;
-//	private boolean accepted;
-//	private String scholarshipPercentage;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "enrollment_payment_methods", joinColumns = @JoinColumn(name = "id_enrollment"), inverseJoinColumns = @JoinColumn(name = "id_payment_method"))
+	private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
 	public Enrollment() {
 	}

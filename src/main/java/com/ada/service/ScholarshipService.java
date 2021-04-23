@@ -5,6 +5,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.ada.model.Course;
 import com.ada.model.Scholarship;
@@ -12,6 +13,7 @@ import com.ada.model.Student;
 import com.ada.payload.request.ScholarshipRequest;
 import com.ada.repository.ScholarshipRepo;
 
+@Service
 public class ScholarshipService {
 
 	@Autowired
