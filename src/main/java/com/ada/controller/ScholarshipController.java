@@ -53,7 +53,7 @@ public class ScholarshipController {
 
 	@PostMapping("/")
 //	@PreAuthorize("hasRole('STUDENT')")
-	public ResponseEntity<Scholarship> createScholarship(@Valid @RequestBody ScholarshipRequest scholarshipRequest) {
+	public ResponseEntity<Scholarship> registerScholarship(@Valid @RequestBody ScholarshipRequest scholarshipRequest) {
 		try {
 			Scholarship scholarship = scholarshipService.createScholarshipRequest(scholarshipRequest);
 			return new ResponseEntity<>(scholarship, HttpStatus.CREATED);

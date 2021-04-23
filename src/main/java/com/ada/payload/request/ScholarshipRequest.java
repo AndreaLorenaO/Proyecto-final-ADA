@@ -1,31 +1,39 @@
 package com.ada.payload.request;
 
-import com.ada.model.Course;
-import com.ada.model.Student;
+import java.util.Set;
+
+import javax.validation.constraints.NotNull;
 
 public class ScholarshipRequest {
 
+	@NotNull
 	private Long studentId;
 
+	@NotNull
+	private Set<String> paymentMethod;
+
+	@NotNull
 	private Long courseId;
 
+	@NotNull
 	private boolean studies;
 
+	@NotNull
 	private boolean works;
 
+	@NotNull
 	private boolean income;
 
+	@NotNull
 	private int monthlyincome;
 
+	@NotNull
 	private boolean dependents;
 
+	@NotNull
 	private int numberOfDependents;
 
 	private boolean approved;
-
-	private Student student;
-
-	private Course course;
 
 	public Long getStudentId() {
 		return studentId;
@@ -99,20 +107,12 @@ public class ScholarshipRequest {
 		this.approved = approved;
 	}
 
-	public Student getStudent() {
-		return student;
+	public Set<String> getPaymentMethod() {
+		return this.paymentMethod;
 	}
 
-	public Student setStudent(Student student) {
-		return this.student = student;
-	}
-
-	public Course getCourse() {
-		return course;
-	}
-
-	public Course setCourse(Course course) {
-		return this.course = course;
+	public void setPaymentMethod(Set<String> paymentMethod) {
+		this.paymentMethod = paymentMethod;
 	}
 
 }

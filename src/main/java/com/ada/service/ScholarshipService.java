@@ -1,6 +1,8 @@
 package com.ada.service;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -8,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ada.model.Course;
+import com.ada.model.EPaymentMethods;
+import com.ada.model.PaymentMethod;
 import com.ada.model.Scholarship;
 import com.ada.model.Student;
 import com.ada.payload.request.ScholarshipRequest;
+import com.ada.repository.PaymentMethodRepo;
 import com.ada.repository.ScholarshipRepo;
 
 @Service
@@ -24,6 +29,9 @@ public class ScholarshipService {
 
 	@Autowired
 	CourseService courseService;
+
+	@Autowired
+	PaymentMethodRepo paymentMethodRepo;
 
 	public Iterable<Scholarship> findAll() {
 		return this.scholarshipRepo.findAll();
@@ -59,6 +67,36 @@ public class ScholarshipService {
 		scholarship.setDependents(scholarshipRequest.isDependents());
 		scholarship.setNumberOfDependents(scholarshipRequest.getNumberOfDependents());
 
+		Set<String> strPaymentMethods = scholarshipRequest.getPaymentMethod();
+		Set<PaymentMethod> paymentMethods = new HashSet<>();
+
+		if (strPaymentMethods == null) {
+			PaymentMethod paymentScholarship50 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_50)
+					.orElseThrow(() -> new RuntimeException("Error: Payment method is not found"));
+			paymentMethods.add(paymentScholarship50);
+		} else {
+			strPaymentMethods.forEach(role -> {
+				switch (role) {
+				case "scholarship_50":
+					PaymentMethod paymentScholarship50 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_50)
+							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found"));
+					paymentMethods.add(paymentScholarship50);
+
+					break;
+				case "scholarship_75":
+					PaymentMethod paymentScholarship75 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_75)
+							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found"));
+					paymentMethods.add(paymentScholarship75);
+
+					break;
+				default:
+					PaymentMethod paymentScholarship100 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_100)
+							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found"));
+					paymentMethods.add(paymentScholarship100);
+				}
+			});
+		}
+		scholarship.setPaymentMethods(paymentMethods);
 		scholarshipRepo.save(scholarship);
 		return scholarship;
 	}

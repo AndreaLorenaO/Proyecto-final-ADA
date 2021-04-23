@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,8 @@ public class EnrollmentService {
 	@Autowired
 	ScholarshipRepo scholarshipRepo;
 
+	Log log = LogFactory.getLog(EnrollmentService.class);
+
 	public Iterable<Enrollment> findAll() {
 		return this.enrollmentRepo.findAll();
 	}
@@ -73,30 +77,35 @@ public class EnrollmentService {
 		Set<String> strPaymentMethods = enrollmentRequest.getPaymentMethod();
 		Set<PaymentMethod> paymentMethods = new HashSet<>();
 
-		strPaymentMethods.forEach(paymentMethod -> {
-			switch (paymentMethod) {
-			case "direct_payment":
-				PaymentMethod pagoDirecPayMethod = paymentMethodRepo.findByName(EPaymentMethods.DIRECT_PAYMENT)
-						.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
-				paymentMethods.add(pagoDirecPayMethod);
-				break;
-			case "scholarship_50":
-				PaymentMethod pagoBeca50 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_50)
-						.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
-				paymentMethods.add(pagoBeca50);
-				break;
-			case "scholarship_75":
-				PaymentMethod pagoBeca75 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_75)
-						.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
-				paymentMethods.add(pagoBeca75);
-				break;
-			case "scholarship_100":
-				PaymentMethod pagoBeca100 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_100)
-						.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
-				paymentMethods.add(pagoBeca100);
-				break;
-			}
-		});
+		if (strPaymentMethods == null) {
+			log.info("Error: Payment method is not found.");
+		} else {
+			strPaymentMethods.forEach(paymentMethod -> {
+				switch (paymentMethod) {
+				case "direct_payment":
+					PaymentMethod pagoDirecPayMethod = paymentMethodRepo.findByName(EPaymentMethods.DIRECT_PAYMENT)
+							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
+					paymentMethods.add(pagoDirecPayMethod);
+					break;
+				case "scholarship_50":
+					PaymentMethod pagoBeca50 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_50)
+							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
+					paymentMethods.add(pagoBeca50);
+					break;
+				case "scholarship_75":
+					PaymentMethod pagoBeca75 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_75)
+							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
+					paymentMethods.add(pagoBeca75);
+					break;
+				case "scholarship_100":
+					PaymentMethod pagoBeca100 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_100)
+							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
+					paymentMethods.add(pagoBeca100);
+					break;
+				}
+			});
+		}
+
 		enrollment.setPaymentMethods(paymentMethods);
 // 		can't save enrollment here because I still have to check the course's quota
 //		enrollmentRepo.save(enrollment);

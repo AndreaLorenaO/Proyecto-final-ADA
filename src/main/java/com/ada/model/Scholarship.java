@@ -1,11 +1,17 @@
 package com.ada.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
@@ -20,6 +26,10 @@ public class Scholarship {
 	@Column(name = "id_scholarship")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int scholarshipId;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "scholarship_type", joinColumns = @JoinColumn(name = "id_scholarship"), inverseJoinColumns = @JoinColumn(name = "id_scholarship_type"))
+	private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
 	@OneToOne
 	@JoinColumn(name = "id_student", nullable = false)
@@ -140,6 +150,14 @@ public class Scholarship {
 
 	public void setApproved(boolean approved) {
 		this.approved = approved;
+	}
+
+	public Set<PaymentMethod> getPaymentMethods() {
+		return paymentMethods;
+	}
+
+	public void setPaymentMethods(Set<PaymentMethod> paymentMethods) {
+		this.paymentMethods = paymentMethods;
 	}
 
 }
