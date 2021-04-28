@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Component
 @Entity
+@Table
 public class Scholarship {
 
 	@Id
@@ -28,7 +30,7 @@ public class Scholarship {
 	private int scholarshipId;
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "scholarship_type", joinColumns = @JoinColumn(name = "id_scholarship"), inverseJoinColumns = @JoinColumn(name = "id_scholarship_type"))
+	@JoinTable(name = "scholarship_payment", joinColumns = @JoinColumn(name = "id_scholarship"), inverseJoinColumns = @JoinColumn(name = "id_payment_method"))
 	private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
 	@OneToOne

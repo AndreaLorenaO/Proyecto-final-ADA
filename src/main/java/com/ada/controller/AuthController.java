@@ -2,12 +2,14 @@ package com.ada.controller;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,9 +17,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.model.ERoles;
@@ -31,6 +36,8 @@ import com.ada.repository.RoleRepo;
 import com.ada.repository.UserRepo;
 import com.ada.securit.jtw.JwtUtils;
 import com.ada.securit.services.UserDetailsImpl;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 // a @CrossOrigin se le debe especificar el IP para que pueda ser llamado por un frontend
 // como esta ahora lo puede llamar cualquiera
@@ -53,6 +60,22 @@ public class AuthController {
 
 	@Autowired
 	JwtUtils jwtUtils;
+
+	@GetMapping("/")
+	public @ResponseBody Iterable<User> getAllUser() {
+		return userRepo.findAll();
+	}
+
+	@GetMapping("/{id}")
+	@Operation(description = "This method return an organization according to a given id")
+	public ResponseEntity<User> getUser(@PathVariable("id") Long userId) {
+		Optional<User> userList = userRepo.findById(userId);
+		if (userList.isPresent()) {
+			return new ResponseEntity<>(userList.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

@@ -1,6 +1,8 @@
 
 package com.ada.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
@@ -63,6 +66,9 @@ public class Course {
 	@JoinColumn(name = "id_organization", nullable = false)
 	@JsonBackReference
 	private Organization organization;
+
+	@OneToMany(mappedBy = "course")
+	Set<Enrollment> courseEnrollment;
 
 	public Course() {
 	}

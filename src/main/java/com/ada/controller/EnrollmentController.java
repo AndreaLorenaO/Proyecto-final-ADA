@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ada.model.EPaymentMethods;
 import com.ada.model.Enrollment;
 import com.ada.payload.request.EnrollmentRequest;
 import com.ada.repository.EnrollmentRepo;
@@ -71,18 +70,14 @@ public class EnrollmentController {
 	public ResponseEntity<Enrollment> createEnrollmentDirect(@Valid @RequestBody EnrollmentRequest enrollmentRequest) {
 		try {
 			Enrollment enrollment = enrollmentService.createEnrollmentRequest(enrollmentRequest);
-			if (enrollment.getPaymentMethods().equals(EPaymentMethods.DIRECT_PAYMENT)) {
-				if (enrollmentService.checkMaxQuota(enrollment)) {
-					enrollmentService.save(enrollment);
-					enrollmentService.updateMaxQuota(enrollment);
-					log.info("Enrollment created");
-					return new ResponseEntity<>(null, HttpStatus.CREATED);
-				} else {
-					log.info("There is no more quota available for the selected course");
-					return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
-				}
+			if (enrollmentService.checkMaxQuota(enrollment)) {
+				enrollmentService.save(enrollment);
+				enrollmentService.updateMaxQuota(enrollment);
+				log.info("Enrollment created");
+				return new ResponseEntity<>(null, HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+				log.info("There is no more quota available for the selected course");
+				return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -94,21 +89,16 @@ public class EnrollmentController {
 	public ResponseEntity<Enrollment> createEnrollmentWithScholarship(
 			@Valid @RequestBody EnrollmentRequest enrollmentRequest) {
 		try {
-			Enrollment enrollment = enrollmentService.createEnrollmentRequest(enrollmentRequest);
-			if (!enrollment.getPaymentMethods().equals(EPaymentMethods.DIRECT_PAYMENT)) {
-				if (enrollmentService.acceptedScholarship(enrollmentRequest)
-						&& enrollmentService.checkScholarshipQuota(enrollment)
-						&& enrollmentService.checkStudentStatus(enrollment)) {
-					enrollmentService.save(enrollment);
-					enrollmentService.updateScholarshipQuota(enrollment);
-					log.info("Enrollment with scholarship created");
-					return new ResponseEntity<>(null, HttpStatus.CREATED);
-				} else {
-					log.info("There is no more quota with scholarship available for the selected course");
-					return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
-				}
+			Enrollment enrollment = enrollmentService.createEnrollmentRequestWithScholarship(enrollmentRequest);
+			if (enrollmentService.acceptedScholarship(enrollmentRequest)
+					&& enrollmentService.checkScholarshipQuota(enrollment)) {
+				enrollmentService.save(enrollment);
+				enrollmentService.updateScholarshipQuota(enrollment);
+				log.info("Enrollment with scholarship created");
+				return new ResponseEntity<>(null, HttpStatus.CREATED);
 			} else {
-				return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+				log.info("There is no more quota with scholarship available for the selected course");
+				return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

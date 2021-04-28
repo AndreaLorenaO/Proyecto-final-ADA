@@ -44,4 +44,9 @@ public class PaymentMethod {
 		this.name = name;
 	}
 
+	public String toString() {
+		return "id_payment_method" + paymentMethodId + ", payment_method:" + name;
+
+	}
+
 }

@@ -18,7 +18,7 @@ public class SignupRequest {
 	private String email;
 
 	private Set<String> role;
-	// es un set porque el usuario no puede tener dos veces el mismo rol
+	// it is a set because the user can't have the same rol twice
 
 	@NotNull
 	@Size(min = 8, max = 16, message = "Password must be greater than 8 characters and less than 16 characters")

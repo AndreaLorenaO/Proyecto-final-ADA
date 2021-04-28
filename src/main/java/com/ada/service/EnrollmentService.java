@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,32 +80,12 @@ public class EnrollmentService {
 		Set<PaymentMethod> paymentMethods = new HashSet<>();
 
 		if (strPaymentMethods == null) {
-			log.info("Error: Payment method is not found.");
+			PaymentMethod pagoDirecPayMethod = paymentMethodRepo.findByName(EPaymentMethods.DIRECT_PAYMENT)
+					.orElseThrow(() -> new RuntimeException("Error: Payment method is not found"));
 		} else {
-			strPaymentMethods.forEach(paymentMethod -> {
-				switch (paymentMethod) {
-				case "direct_payment":
-					PaymentMethod pagoDirecPayMethod = paymentMethodRepo.findByName(EPaymentMethods.DIRECT_PAYMENT)
-							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
-					paymentMethods.add(pagoDirecPayMethod);
-					break;
-				case "scholarship_50":
-					PaymentMethod pagoBeca50 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_50)
-							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
-					paymentMethods.add(pagoBeca50);
-					break;
-				case "scholarship_75":
-					PaymentMethod pagoBeca75 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_75)
-							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
-					paymentMethods.add(pagoBeca75);
-					break;
-				case "scholarship_100":
-					PaymentMethod pagoBeca100 = paymentMethodRepo.findByName(EPaymentMethods.SCHOLARSHIP_100)
-							.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
-					paymentMethods.add(pagoBeca100);
-					break;
-				}
-			});
+			PaymentMethod pagoDirecPayMethod = paymentMethodRepo.findByName(EPaymentMethods.DIRECT_PAYMENT)
+					.orElseThrow(() -> new RuntimeException("Error: Payment method is not found."));
+			paymentMethods.add(pagoDirecPayMethod);
 		}
 
 		enrollment.setPaymentMethods(paymentMethods);
@@ -163,6 +145,26 @@ public class EnrollmentService {
 			return true;
 		}
 		return false;
+	}
+
+	public Enrollment createEnrollmentRequestWithScholarship(@Valid EnrollmentRequest enrollmentRequest) {
+		Optional<Student> studentOp = studentService.findById(enrollmentRequest.getStudentId());
+		Student student = studentOp.get();
+
+		Optional<Course> courseOp = courseService.findById(enrollmentRequest.getCourseId());
+		Course course = courseOp.get();
+
+		Optional<Scholarship> scholarshipOp = scholarshipService.findById(enrollmentRequest.getScholarshipId());
+		Scholarship scholarship = scholarshipOp.get();
+		Set<PaymentMethod> payMethod = scholarship.getPaymentMethods();
+		Set<PaymentMethod> payMethodNew = new HashSet();
+		payMethodNew.addAll(payMethod);
+
+		Enrollment enrollment = new Enrollment();
+		enrollment.setStudent(student);
+		enrollment.setCourse(course);
+		enrollment.setPaymentMethods(payMethodNew);
+		return enrollment;
 	}
 
 }
