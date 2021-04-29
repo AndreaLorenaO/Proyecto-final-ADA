@@ -119,16 +119,6 @@ public class EnrollmentService {
 		}
 	}
 
-	public boolean checkStudentStatus(Enrollment enrollment) {
-		Student student = enrollment.getStudent();
-
-		Optional<Scholarship> scholarshipOp = scholarshipRepo.findByStudent(student);
-		if (scholarshipOp.isPresent()) {
-			return false;
-		}
-		return true;
-	}
-
 	public void updateScholarshipQuota(Enrollment enrollment) {
 		Course course = enrollment.getCourse();
 		int scholarshipQuota = course.getScholarshipsQuota();

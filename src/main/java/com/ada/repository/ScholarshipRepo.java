@@ -13,4 +13,6 @@ public interface ScholarshipRepo extends CrudRepository<Scholarship, Integer> {
 
 	Optional<Scholarship> findByStudent(Student student);
 
+	Optional<Scholarship> findByStudentId(Long studentId);
+
 }

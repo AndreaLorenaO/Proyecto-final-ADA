@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.model.Scholarship;
 import com.ada.payload.request.ScholarshipRequest;
+import com.ada.repository.ScholarshipRepo;
 import com.ada.service.ScholarshipService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,9 @@ public class ScholarshipController {
 
 	@Autowired
 	ScholarshipService scholarshipService;
+
+	@Autowired
+	ScholarshipRepo scholarshipRepo;
 
 	Log log = LogFactory.getLog(ScholarshipController.class);
 
@@ -55,8 +59,13 @@ public class ScholarshipController {
 //	@PreAuthorize("hasRole('STUDENT')")
 	public ResponseEntity<Scholarship> registerScholarship(@Valid @RequestBody ScholarshipRequest scholarshipRequest) {
 		try {
-			Scholarship scholarship = scholarshipService.createScholarshipRequest(scholarshipRequest);
-			return new ResponseEntity<>(scholarship, HttpStatus.CREATED);
+			Optional<Scholarship> scholarshipOp = scholarshipRepo.findByStudentId(scholarshipRequest.getStudentId());
+			if (scholarshipOp.isPresent()) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			} else {
+				Scholarship scholarship = scholarshipService.createScholarshipRequest(scholarshipRequest);
+				return new ResponseEntity<>(scholarship, HttpStatus.CREATED);
+			}
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

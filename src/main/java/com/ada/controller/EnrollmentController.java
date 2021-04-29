@@ -90,14 +90,18 @@ public class EnrollmentController {
 			@Valid @RequestBody EnrollmentRequest enrollmentRequest) {
 		try {
 			Enrollment enrollment = enrollmentService.createEnrollmentRequestWithScholarship(enrollmentRequest);
-			if (enrollmentService.acceptedScholarship(enrollmentRequest)
-					&& enrollmentService.checkScholarshipQuota(enrollment)) {
-				enrollmentService.save(enrollment);
-				enrollmentService.updateScholarshipQuota(enrollment);
-				log.info("Enrollment with scholarship created");
-				return new ResponseEntity<>(null, HttpStatus.CREATED);
+			if (enrollmentService.acceptedScholarship(enrollmentRequest)) {
+				if (enrollmentService.checkScholarshipQuota(enrollment)) {
+					enrollmentService.save(enrollment);
+					enrollmentService.updateScholarshipQuota(enrollment);
+					log.info("Enrollment with scholarship created");
+					return new ResponseEntity<>(enrollment, HttpStatus.CREATED);
+				} else {
+					log.info("There is no more quota with scholarship available for the selected course");
+					return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
+				}
 			} else {
-				log.info("There is no more quota with scholarship available for the selected course");
+				log.info("The scholarship has not been accepted by the admin");
 				return new ResponseEntity<>(null, HttpStatus.NOT_IMPLEMENTED);
 			}
 		} catch (Exception e) {

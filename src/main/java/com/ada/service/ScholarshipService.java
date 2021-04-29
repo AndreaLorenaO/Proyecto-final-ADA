@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ada.model.Course;
 import com.ada.model.EPaymentMethods;
+import com.ada.model.Enrollment;
 import com.ada.model.PaymentMethod;
 import com.ada.model.Scholarship;
 import com.ada.model.Student;
@@ -112,6 +113,16 @@ public class ScholarshipService {
 
 		scholarshipRepo.save(scholarshipUpdate);
 		return scholarshipUpdate;
+	}
+
+	public boolean checkStudentStatus(Enrollment enrollment) {
+		Student student = enrollment.getStudent();
+
+		Optional<Scholarship> scholarshipOp = scholarshipRepo.findByStudent(student);
+		if (scholarshipOp.isPresent()) {
+			return false;
+		}
+		return true;
 	}
 
 }
