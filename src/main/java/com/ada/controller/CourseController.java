@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.model.Course;
@@ -41,7 +40,7 @@ public class CourseController {
 	Course course;
 
 	@GetMapping("/")
-	public @ResponseBody Iterable<Course> getAllCourse() {
+	public Iterable<Course> getAllCourse() {
 		return courseService.findAll();
 	}
 

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.model.Scholarship;
@@ -41,7 +40,7 @@ public class ScholarshipController {
 	Log log = LogFactory.getLog(ScholarshipController.class);
 
 	@GetMapping("/")
-	public @ResponseBody Iterable<Scholarship> getAllScholarship() {
+	public Iterable<Scholarship> getAllScholarship() {
 		return scholarshipService.findAll();
 	}
 

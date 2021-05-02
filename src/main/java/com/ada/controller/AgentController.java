@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.model.Agent;
@@ -44,7 +43,7 @@ public class AgentController {
 	@GetMapping("/")
 	@Operation(description = "List of all the agents registered in the app")
 //	@PreAuthorize("hasRole('ADMIN')")
-	public @ResponseBody Iterable<Agent> getAllAgent() {
+	public Iterable<Agent> getAllAgent() {
 		return agentService.findAll();
 	}
 

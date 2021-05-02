@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ada.model.Enrollment;
@@ -50,7 +49,7 @@ public class EnrollmentController {
 	Log log = LogFactory.getLog(EnrollmentController.class);
 
 	@GetMapping("/")
-	public @ResponseBody Iterable<Enrollment> getAllEnrollment() {
+	public Iterable<Enrollment> getAllEnrollment() {
 		return enrollmentService.findAll();
 	}
 
