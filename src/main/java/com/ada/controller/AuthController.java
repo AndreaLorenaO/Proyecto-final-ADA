@@ -35,7 +35,7 @@ import com.ada.payload.response.MessageResponse;
 import com.ada.repository.RoleRepo;
 import com.ada.repository.UserRepo;
 import com.ada.securit.jtw.JwtUtils;
-import com.ada.securit.services.UserDetailsImpl;
+import com.ada.service.UserDetailsImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
 

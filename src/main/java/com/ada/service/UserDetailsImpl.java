@@ -1,4 +1,4 @@
-package com.ada.securit.services;
+package com.ada.service;
 
 import java.util.Collection;
 import java.util.List;
