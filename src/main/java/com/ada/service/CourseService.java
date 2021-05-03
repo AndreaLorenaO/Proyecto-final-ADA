@@ -2,9 +2,9 @@ package com.ada.service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,15 +31,21 @@ public class CourseService {
 	}
 
 	public List<Course> findByOrgAndCategory(List<Course> coursesByOrg, String courseCateg) {
-		List<Course> coursesByOrgAndCateg = new ArrayList<Course>();
-		Iterator<Course> listByCateg = coursesByOrg.iterator();
-		while (listByCateg.hasNext()) {
-			Course course = listByCateg.next();
-			if (courseCateg.equals(course.getCourseCateg())) {
-				coursesByOrgAndCateg.add(course);
-			}
-		}
+		List<Course> coursesByOrgAndCateg = coursesByOrg.stream().filter((c) -> c.getCourseCateg().equals(courseCateg))
+				.collect(Collectors.toList());
+
 		return coursesByOrgAndCateg;
+
+//		Code written as imperative programming
+//		List<Course> coursesByOrgAndCateg = new ArrayList<Course>();
+//		Iterator<Course> listByCateg = coursesByOrg.iterator();
+//		while (listByCateg.hasNext()) {
+//			Course course = listByCateg.next();
+//			if (courseCateg.equals(course.getCourseCateg())) {
+//				coursesByOrgAndCateg.add(course);
+//			}
+//		}
+//		return coursesByOrgAndCateg;
 	}
 
 	public List<Course> findByCategory(String courseCateg) {
